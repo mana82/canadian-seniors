@@ -1,2 +1,2 @@
-# canadian-seniors
+# Something Else
 magento shop
