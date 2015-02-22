@@ -1,0 +1,99 @@
+<?php if($this->getItems()->getSize()): ?>
+	<?php $_helper = $this->helper('catalog/output'); ?>
+<div class="block block-related">
+    
+    <div class="block-content">
+        <p class="block-subtitle alert alert-info"><?php echo $this->__('Check items to add to the cart or') ?>&nbsp;<a href="#" onclick="selectAllRelated(this); return false;"><?php echo $this->__('select all') ?></a></p>
+        <div class="mini-products-list" id="block-related">
+        <?php foreach($this->getItems() as $_item): ?>
+            <div class="item checkbox row">
+            	<label>
+            		<div class="col-sm-2">
+            			<img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(100) ?>" width="100" height="100" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" />
+            		</div>
+            		
+	                <div class="col-sm-7 product">
+	                    <a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>" class="product-image"></a>
+	                    <div class="product-details">
+	                        <p class="product-name list-group-item-heading">
+	                        	<strong><?php echo $this->htmlEscape($_item->getName()) ?></strong>
+	                        </p>
+	                        
+	                        <?php if ($_item->getShortDescription()):?>
+				                <div class="list-group-item-text">
+				                    <div class="std"><?php echo $_helper->productAttribute($_item, nl2br($_item->getShortDescription()), 'short_description') ?></div>
+				                    <strong><a href="<?php echo $_item->getProductUrl() ?>" target="_blank">mehr...</a></strong>
+				                </div>
+				            <?php endif;?>
+				            
+	                        <?php /*if ($this->helper('wishlist')->isAllow()) : ?>
+	                            <a href="<?php echo $this->getAddToWishlistUrl($_item) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a>
+	                        <?php endif;*/ ?>
+	                    </div>
+	                </div>
+	                <div class="col-sm-3">
+	                	<?php echo $this->getPriceHtml($_item, true, '-related') ?>
+	                	
+		                <?php if(!$_item->isComposite() && $_item->isSaleable()): ?>
+		                    <?php if (!$_item->getRequiredOptions()): ?>
+		                    	<?php $buttonTitle = $this->__('Add to Cart'); ?>
+		                    	<div class="btn btn-block btn-default" onclick="jQuery('this').toggleClass('active');">
+		                    	    <?php echo $buttonTitle ?>
+		                        	<input type="checkbox" class="related-checkbox" id="related-checkbox<?php echo $_item->getId() ?>" name="related_products[]" value="<?php echo $_item->getId() ?>" />
+		                        </div>
+		                    <?php endif; ?>
+		                <?php endif; ?>
+	                </div>
+                </label>
+                
+            </div>
+            <hr />
+        <?php endforeach ?>
+        </div>
+        <script type="text/javascript">decorateList('block-related', 'none-recursive')</script>
+    </div>
+    <script type="text/javascript">
+    //<![CDATA[
+    $$('.related-checkbox').each(function(elem){
+        Event.observe(elem, 'click', addRelatedToProduct)
+    });
+
+    var relatedProductsCheckFlag = false;
+    function selectAllRelated(txt){
+        if (relatedProductsCheckFlag == false) {
+            $$('.related-checkbox').each(function(elem){
+                elem.checked = true;
+            });
+            relatedProductsCheckFlag = true;
+            txt.innerHTML="<?php echo $this->__('unselect all') ?>";
+        } else {
+            $$('.related-checkbox').each(function(elem){
+                elem.checked = false;
+            });
+            relatedProductsCheckFlag = false;
+            txt.innerHTML="<?php echo $this->__('select all') ?>";
+        }
+        addRelatedToProduct();
+    }
+
+    function addRelatedToProduct(){
+        var checkboxes = $$('.related-checkbox');
+        var values = [];
+        for(var i=0;i<checkboxes.length;i++){
+            if(checkboxes[i].checked) values.push(checkboxes[i].value);
+        }
+        if($('related-products-field')){
+            $('related-products-field').value = values.join(',');
+        }
+    }
+    
+    
+  jQuery(document).ready(function ($) {
+  	$('.block-related .item .related-checkbox').click(function(){
+  		jQuery(this).parent().toggleClass('active');
+  	});
+  });
+    //]]>
+    </script>
+</div>
+<?php endif ?>

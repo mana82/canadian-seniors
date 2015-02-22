@@ -1,0 +1,55 @@
+<?
+$categories = Mage::getModel('catalog/category')->getCollection()
+                ->addAttributeToSelect('*')
+                ->addFieldToFilter('include_in_menu',array('eq' => '1'))
+                ->addFieldToFilter('is_active', array('eq' => '1'))
+				->addFieldToFilter('thumbnail', array('neq' => ''))
+                ->addAttributeToSort('position', 'asc');
+
+$_imgPath = Mage::getBaseUrl('media').'catalog/category/';
+
+$_collectionSize = $categories->count();
+
+/* Falls nicht 4 Categories gewählt wurden, wird der Teaser ergänzt */
+if(4-$_collectionSize != 0): 
+
+	$categories2 = Mage::getModel('catalog/category')->getCollection()
+				->addAttributeToSelect('*')
+				->addFieldToFilter('include_in_menu',array('eq' => '1'))
+				->addFieldToFilter('is_active', array('eq' => '1'))
+				->addFieldToFilter('thumbnail', array('neq' => ''))
+				->addAttributeToSort('position', 'asc')
+				->setPage(1,4-$_collectionSize); 
+	
+	foreach ($categories2 as $item) {
+		$categories->addItem($item);
+	}
+endif;
+$_collectionSize = $categories->count();
+$_columnCount = 2;
+
+
+if($_collectionSize > 0):?>
+<? $i=0; foreach ($categories as $key => $_categorie): ?>
+
+	<?php if ($i++%$_columnCount==0): ?>
+	<div class="row">
+	<? endif; ?>
+
+		<div class="col-sm-6">
+			<div class="category_teaser">
+				<a href="<?=$_categorie->getUrl() ?>">
+					<div class="name"><span><? echo $_categorie->getName(); ?></span> <i class="icon-chevron-right"></i></div>
+					<div class="picture">
+						<img src="<?=$_imgPath.$_categorie->getThumbnail() ?>" alt="<? echo $_categorie->getName(); ?>" />
+					</div>
+				</a>
+			</div>
+		</div>
+		
+	<?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+    </div>
+    <?php endif ?>
+<? endforeach ?>
+<? endif; ?>
+

@@ -1,0 +1,60 @@
+<?php
+/* Cross Sell at Success Page */
+$maxItems = 3;
+$orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
+$order = Mage::getSingleton('sales/order')->load($orderId);
+$crossSell = array();
+
+$_products = $order->getAllVisibleItems();
+$_collectionSize = count($_products);
+$i=0; 
+foreach ( $_products as $item ):
+	$_product = Mage::getModel('catalog/product')->load($item->getProductId());
+    
+    if (!$_product->isVisibleInSiteVisibility()) {
+    	continue;
+    }
+	
+	$itemCollection = $_product->getCrossSellProductCollection()
+        ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+        ->setPositionOrder()
+        ->addStoreFilter()
+		->setPageSize($maxItems);
+
+    Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($itemCollection);
+
+    $itemCollection->load();
+	$i = $i + $itemCollection->count();
+	
+    foreach ($itemCollection as $_item): ?>
+    	<? $crossSell[] = $_item ?>
+	<? endforeach;
+    		
+	if($i >= $maxItems){ break; }  ?>
+<?php endforeach; ?>
+
+<? if(count($crossSell)>0):?>
+<hr />
+<div class="crosssell">
+	<div class="lead">
+		<?php echo $this->__('Based on your selection, you may be interested in the following items:') ?>
+	</div>
+	<div id="crosssell-products-list" class="row">
+	<? $i=0; foreach ($crossSell as $_item): $i++; ?>
+		<div class="col-sm-4">
+			<div class="item media thumbnail">
+				<a class="product-image pull-left" href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_item->getName()) ?>">
+					<img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(150); ?>" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" />
+				</a>
+				<div class="product-details media-body">
+					<div class="product-name media-heading"><a href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->htmlEscape($_item->getName()) ?></a></div>
+					<?php echo $this->getPriceHtml($_item, true) ?>
+					<button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart btn btn-success" onclick="setLocation('<?php echo $this->getAddToCartUrl($_item) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+				</div>
+			</div>
+		</div>
+		<? if($i >= $maxItems){ break; }  ?>
+	<? endforeach; ?>
+	</div>
+</div>
+<? endif; ?>

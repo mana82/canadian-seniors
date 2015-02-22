@@ -1,0 +1,151 @@
+<?php /* @var $this Mage_Catalog_Block_Product_View_Options_Type_Select */ ?>
+<?php $_option = $this->getOption() ?>
+
+<?php if ($_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_DROP_DOWN): ?>
+	<?php // OPTION_TYPE_DROP_DOWN ?>
+	<?php
+		$store = $this->getProduct()->getStore();
+		$require = ($_option->getIsRequire()) ? 'required-entry' : '';
+	?>
+	<div class="form-group input-box clearfix" data-pos="<?php echo $_option->getData('sort_order'); ?>" data-depend="<?php echo $_option->getData('depend'); ?>" data-group="<?php echo md5($_option->getData('group')); ?>" data-group-label="<?php echo $this->htmlEscape($_option->getData('group')); ?>" <?php echo $_option->getData('depend') != '' ? 'style="display:none"' : '' ?>>
+		<div class="konfigurator-label">
+		<label <?php if ($_option->getIsRequire()) echo ' class="required"' ?>>
+			<?php echo  $this->htmlEscape($_option->getTitle()) ?> <?php if ($_option->getIsRequire()) echo '<em>*</em>' ?>
+		</label>
+		</div>
+		<div class="konfigurator-inputs">
+			<select name="<? echo 'options['.$_option->getid().']'?>" id="<?php echo 'select_'.$_option->getId() ?>" class="form-control product-custom-option <?php echo $require ?>" onchange="opConfig.reloadPrice()">
+			<?php 
+			foreach($_option->getValues() as $_value){
+				if($_value->getPrice() == 0){
+					echo '<option data-sku="'.$_value->getSku().'" value="'.$_value->getOptionTypeId().'" price="'.$this->helper('core')->currencyByStore($_value->getPrice(true), $store, false).'">'.$_value->getTitle().'</option>';
+				}else{
+					echo '<option data-sku="'.$_value->getSku().'" value="'.$_value->getOptionTypeId().'" price="'.$this->helper('core')->currencyByStore($_value->getPrice(true), $store, false).'">'.$_value->getTitle().' &nbsp;&nbsp;&nbsp;(+'.$this->helper('core')->currencyByStore($_value->getPrice(true), $store, true).')</option>';
+				}
+			} 
+			?>
+			<select>
+			<?if($_option->getInfo() != ''): ?>
+			<div class="konfigurator-info">
+				Auswahlhilfe
+				<a href="#" class="foobar123"  data-toggle="popover"  data-placement="right" data-content="<?php echo $this->htmlEscape($_option->getInfo()) ?>">
+					<span class="glyphicon glyphicon-info-sign"></span>
+				</a>
+				<script>
+				jQuery(function () {
+					jQuery('[data-toggle="popover"]').popover({
+						'trigger': 'hover',
+						'placement': 'right'
+					});
+				});					
+				</script>
+			</div>
+			<?endif;?>
+		</div>
+		
+	</div>
+<?php elseif ($_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_RADIO): ?>
+
+	
+	<?php // OPTION_TYPE_RADIO ?>
+	<?php
+		$store = $this->getProduct()->getStore();
+		$require = ($_option->getIsRequire()) ? 'required-entry' : '';
+		$configValue = $this->getProduct()->getPreconfiguredValues()->getData('options/' . $_option->getId());
+	?>
+	<div class="form-group input-box clearfix" data-pos="<?php echo $_option->getData('sort_order'); ?>" data-depend="<?php echo $_option->getData('depend'); ?>" data-group="<?php echo md5($_option->getData('group')); ?>" data-group-label="<?php echo $this->htmlEscape($_option->getData('group')); ?>" <?php echo $_option->getData('depend') != '' ? 'style="display:none"' : '' ?>>
+		<div class="konfigurator-label">
+			<label <?php if ($_option->getIsRequire()) echo 'class="required"' ?>>
+				<?php echo $this->htmlEscape($_option->getTitle()) ?><?php if ($_option->getIsRequire()) echo '<em>*</em>' ?>
+			</label>
+		</div>
+		<div class="konfigurator-inputs">
+			<?php
+			$first_item = true;
+			$color_pattern = '/^color_([a-z]+)\-([a-z]+)/';
+			
+			foreach($_option->getValues() as $key => $_value){
+				if( preg_match($color_pattern, $_value->getSku(), $match) ){
+					$color = 'muster' . '/' . $match[1] . '/' . $match[2];
+					$thumb = '/media/' . $color . '_thumb.jpg';
+					$big1 = '/media/' . $color . '.jpg';
+					$big2 = '/media/' . $color . '_m.jpg';
+					?>				
+					<div class="panel panel-default pull-left konfigurator color">
+						<div class="panel-head">
+							<?
+							echo '<label class="radio">';
+							if($_value->getPrice() == 0){
+								echo $_value->getTitle();
+							}else{
+								echo $_value->getTitle().'&nbsp;&nbsp;&nbsp;(+'.$this->helper('core')->currencyByStore($_value->getPrice(true), $store, true).')';
+							}					
+							echo '<input type="radio" '.(($configValue == $_value->getOptionTypeId() || ( empty($configValue) && $first_item)) ? 'checked="checked"' : '').' data-sku="'.$_value->getSku().'" value="'.$_value->getOptionTypeId().'" price="'.$this->helper('core')->currencyByStore($_value->getPrice(true), $store, false).'" class="product-custom-option pull-right" onclick="opConfig.reloadPrice()" id="options_' . $_value->getId() . '"  name="options[' . $_option->getId() . ']" />';
+							echo '</label>';
+							?>
+						</div>
+						<div class="panel-body">
+							<img src="<?=$thumb?>" alt="<?=$_value->getTitle()?>">
+							<a href="#" data-toggle="modal" data-target="#color_modal_<?=$match[2]?>">	
+								<span class="glyphicon glyphicon-search"></span>
+							</a>
+							
+							<div class="modal fade" id="color_modal_<?=$match[2]?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							  <div class="modal-dialog">
+								<div class="modal-content">
+								  <div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									<h4 class="modal-title" id="myModalLabel"><?=$_value->getTitle()?></h4>
+								  </div>
+								  <div class="modal-body">
+									<img src="<?=$big1?>" alt="" />
+								  </div>
+								</div>
+							  </div>
+							</div>
+						</div>
+					</div>
+					<?
+				}else{
+					echo '<label class="radio">';
+					echo '<input type="radio" '.(($configValue == $_value->getOptionTypeId() || ( empty($configValue) && $first_item)) ? 'checked="checked"' : '').' data-sku="'.$_value->getSku().'" value="'.$_value->getOptionTypeId().'" price="'.$this->helper('core')->currencyByStore($_value->getPrice(true), $store, false).'" class="product-custom-option" onclick="opConfig.reloadPrice()" id="options_' . $_value->getId() . '"  name="options[' . $_option->getId() . ']" />';
+				
+					if($_value->getPrice() == 0){
+						echo $_value->getTitle();
+					}else{
+						echo $_value->getTitle().'&nbsp;&nbsp;&nbsp;(+'.$this->helper('core')->currencyByStore($_value->getPrice(true), $store, true).')';
+					}
+				
+					echo '</label>';
+				}
+			
+				$first_item = false;
+			} 
+			?>
+			
+		</div>
+		<div class="konfigurator-info">
+			<p class="infobox"><?php echo  $this->htmlEscape($_option->getInfo()) ?></p>
+		</div>
+	</div>
+
+<?php else: ?>
+
+	<label<?php if ($_option->getIsRequire()) echo ' class="required"' ?>><?php echo  $this->htmlEscape($_option->getTitle()) ?><?php if ($_option->getIsRequire()) echo '<em>*</em>' ?></label>
+	<div class="input-box">
+		<?php echo $this->getValuesHtml() ?>
+		<?php if ($_option->getIsRequire()): ?>
+			<?php if ($_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_RADIO || $_option->getType() == Mage_Catalog_Model_Product_Option::OPTION_TYPE_CHECKBOX): ?>
+				<span id="options-<?php echo $_option->getId() ?>-container"></span>
+			<?php endif; ?>
+		<?php endif;?>
+	</div>
+	
+<?php endif; ?>
+
+<script>
+	jQuery('.konfigurator.color .panel-body').click(function(){
+		jQuery(this).parent().find('input').prop('checked', true);
+		
+	});
+</script>

@@ -1,0 +1,21 @@
+<div id="carousel-homepage" class="carousel slide">
+	
+	<ol class="carousel-indicators">
+	<?foreach($this->getSlides() as $key => $slide):?>
+		<li data-target="#carousel-homepage" data-slide-to="<?=$key?>" class="<?=$key==0?'active ':''?>"></li>
+	<?endforeach;?>
+	</ol>
+  
+	<div class="carousel-inner">
+	<?foreach($this->getSlides() as $key => $slide):?>
+		<div class="<?=$key==0?'active ':''?>item"><a href="<?=$slide['link']?>"><img src="/media/slider/<?=$slide['image']?>" alt="" /></a></div>
+	<?endforeach;?>
+	</div>
+	
+	<a class="left carousel-control" href="#carousel-homepage" data-slide="prev">
+	    <span class="icon-prev"></span>
+	</a>
+	<a class="right carousel-control" href="#carousel-homepage" data-slide="next">
+	    <span class="icon-next"></span>
+	</a>
+</div>

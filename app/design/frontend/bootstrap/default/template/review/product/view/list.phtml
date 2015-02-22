@@ -1,0 +1,69 @@
+<?php $_items = $this->getReviewsCollection()->getItems();?>
+<div class="box-collateral box-reviews" id="customer-reviews">
+    <?php if (count($_items)):?>
+        <p class="lead"><?php echo $this->__('Customer Reviews') ?></p>
+        <?php echo $this->getChildHtml('toolbar') ?>
+        <dl>
+        
+		<div class="pull-right">
+        	<a data-toggle="modal" href="#review-form-popup" class="btn btn-success"><?php echo $this->__('Produktbewertung verfassen') ?></a>
+        </div>        
+        <?php foreach ($_items as $_review):?>
+            <dt>
+                <?php echo $this->htmlEscape($_review->getTitle()) ?> <?php echo $this->__('Review by <span>%s</span>', $this->htmlEscape($_review->getNickname())) ?>
+            </dt>
+            <dd class="row">
+                <?php $_votes = $_review->getRatingVotes(); ?>
+                <?php if (count($_votes)): ?>
+                <div class="col-md-4">
+                <p>
+                	<?php echo nl2br($this->htmlEscape($_review->getDetail())) ?>
+                	<small class="date"><?php echo $this->__('(Posted on %s)', $this->formatDate($_review->getCreatedAt()), 'long') ?></small>
+                </p>
+                <table class="ratings-table table table-striped table-bordered table-condensed">
+                    <col width="1" />
+                    <col />
+                    <tbody>
+                        <?php foreach ($_votes as $_vote): ?>
+                        <tr>
+                            <th><?php echo $this->escapeHtml($_vote->getRatingCode()) ?></th>
+                            <td>
+                            	<div class="rating-box">
+			                        <div class="rating" style="width:<?php echo ceil($_vote->getPercent()) ?>%;"></div>
+			                    </div>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                </div>
+                <?php endif; ?>
+                
+            </dd>
+        <?php endforeach; ?>
+        </dl>
+        <?php echo $this->getChildHtml('toolbar') ?>
+        
+        
+         <!-- Modal -->
+  <div class="modal fade" id="review-form-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title"><?php echo $this->__('Write Your Own Review') ?></h4>
+        </div>
+        <div class="modal-body">
+          
+        <?php echo $this->getChildHtml('review_form') ?>
+         </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+        
+    <?php else: ?>
+    	<?php echo $this->getChildHtml('review_form') ?>
+    <?php endif;?>
+    
+</div>

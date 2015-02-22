@@ -1,0 +1,9 @@
+<? if ($current_category = Mage::registry('current_category')): ?>
+    <? if($current_category->hasData('seotext1') && trim($current_category->getData('seotext1')) != ""): ?>
+    <div class="panel panel-default">
+    	<div class="panel-body">
+    		<? echo $current_category->getData('seotext1'); ?>
+    	</div>
+    </div>
+	<? endif; ?>
+<? endif; ?>

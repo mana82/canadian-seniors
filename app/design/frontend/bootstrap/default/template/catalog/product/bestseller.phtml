@@ -1,0 +1,77 @@
+<?php
+
+$visibility = array(
+	Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
+	Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG
+);
+
+$_columnCount = $this->getColumnCount();
+$storeId = Mage::app()->getStore()->getId();
+$_image_resize = 250;
+
+$_productCollection = Mage::getResourceModel('reports/product_collection')
+                          ->addAttributeToSelect('*')
+                          ->setStoreId($storeId)
+              			  ->addStoreFilter($storeId)
+                          ->addOrderedQty()
+                          ->addAttributeToFilter('visibility', $visibility);
+						  
+if ($current_category = Mage::registry('current_category')):
+    $_productCollection->addCategoryFilter($current_category);
+	$_image_resize = 150;
+endif;
+
+$_productCollection->setPage(1,$_columnCount); 
+$_productCollection->setOrder('ordered_qty', 'desc');
+							  
+?>
+<?php if (($_products = $_productCollection) && $_products->getSize()): ?>
+	<? if(!$this->getVerticalLayout()): ?>
+	<div class="subtitle lead"><?php echo $this->__('Bestseller') ?></div>
+    <? else: ?>
+    <div class="panel panel-default">
+    	<div class="panel-heading"><?php echo $this->__('Bestseller') ?></div>
+    	<div class="panel-body">
+    <? endif; ?>
+
+<?php $i=0; foreach ($_products->getItems() as $_product): ?>
+    
+<? if(!$this->getVerticalLayout()): ?>
+    <?php if ($i++%$_columnCount==0): ?>
+    <div class="products-grid row bestseller">
+	<?php endif ?>
+        <div class="col-sm-6 col-md-<?=($_columnCount==4)?3:4; ?> col-lg-<?php echo round(12/$_columnCount); ?> item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
+    		<div class="thumbnail">
+<? else: ?>
+    <div class="row bestseller">
+    	<div class="col-lg-12">
+    		<div class="bestseller-item">
+<? endif; ?>
+        		<a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>">
+        		<div class="text-center">
+                	<img class="product-image" src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($_image_resize) ?>" width="<?=$_image_resize ?>" height="<?=$_image_resize ?>" alt="<?php echo $this->htmlEscape($_product->getName()) ?>" />
+                </div>
+                <div class="caption">
+	                <div class="product-name"><?php echo $this->htmlEscape($_product->getName()) ?></div>
+	                <?php #echo $this->getReviewsSummaryHtml($_product, 'short') ?>
+	                <div class="actions">
+	                    <?php if($_product->isSaleable()): ?>
+	                    	<p class="availability in-stock text-success"><span><?php echo $this->__('In stock') ?></span></p>
+	                    <?php else: ?>
+	                        <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+	                    <?php endif; ?>
+	                </div>
+	                <?php echo $this->getPriceHtml($_product, true, '-new') ?>
+	            </div>
+	            </a>
+        	</div>
+        </div>
+<?php if ($i%$_columnCount==0 || $i==count($_products)): ?>
+    </div>
+<?php endif ?>
+    
+<?php endforeach; ?>
+<? if($this->getVerticalLayout()): ?>
+	</div></div>
+<? endif; ?>
+<?php endif; ?>

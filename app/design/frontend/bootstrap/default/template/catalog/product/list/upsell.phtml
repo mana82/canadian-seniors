@@ -1,0 +1,41 @@
+<?php if(count($this->getItemCollection()->getItems())): ?>
+<div class="box-collateral box-up-sell">
+    <strong class="lead"><?php echo $this->__('You may also be interested in the following product(s)') ?></strong>
+    <div class="products-grid" id="upsell-product-table">
+    <?php #$this->setColumnCount(6); // uncomment this line if you want to have another number of columns. also can be changed in layout ?>
+    <?php $this->resetItemsIterator() ?>
+    <?php for($_i=0;$_i<$this->getRowCount();$_i++): ?>
+        <div class="row">
+        <?php for($_j=0;$_j<$this->getColumnCount();$_j++): ?>
+            <?php if($_link=$this->getIterableItem()): ?>
+            <div class="col-xs-4 col-sm-4 col-lg-4">
+    			<div class="thumbnail">
+    				<a href="<?php echo $_link->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_link->getName()) ?>">
+    				<div class="text-center">
+                		<img class="product-image" src="<?php echo $this->helper('catalog/image')->init($_link, 'small_image')->resize(150) ?>" width="150" height="150" alt="<?php echo $this->htmlEscape($_link->getName()) ?>" />
+                	</div>
+                	<div class="caption">
+                		<div class="product-name"><?php echo $this->htmlEscape($_link->getName()) ?></div>
+                		
+                		<?php if ($_link->isAvailable()): ?>
+						    <p class="availability in-stock text-success"><span><?php echo $this->__('In stock') ?></span></p>
+						<?php else: ?>
+						    <p class="availability out-of-stock text-danger"><span><?php echo $this->__('Out of stock') ?></span></p>
+						<?php endif; ?>
+                		
+                		<?php echo $this->getPriceHtml($_link, true, '-upsell') ?>
+                		<?php #echo $this->getReviewsSummaryHtml($_link) ?>
+                	</div>
+                	</a>
+            	</div>
+            </div>
+            <?php else: ?>
+
+            <?php endif; ?>
+        <?php endfor; ?>
+        </div>
+    <?php endfor; ?>
+    </div>
+    <? /*<script type="text/javascript">decorateTable('upsell-product-table')</script> */ ?>
+</div>
+<?php endif ?>

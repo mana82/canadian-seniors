@@ -1,0 +1,68 @@
+<div class="page-header">
+    <h1>
+    	<span class="icon-stack">
+  <i class="icon-sign-blank icon-stack-base  text-success"></i>
+  <i class="icon-ok icon-light"></i>
+</span>
+<?php echo $this->__('Your order has been received.') ?></h1>
+</div>
+
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<div class="panel panel-default success-container">
+	<div class="panel-body">
+		<div class="h2"><?php echo $this->__('Thank you for your purchase!') ?></div>
+		<?php if ($this->getOrderId()):?>
+		<?php if ($this->getCanViewOrder()) :?>
+			<p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
+		<?php  else :?>
+			<p><?php echo $this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId())) ?></p>
+		<?php endif;?>
+			<p><?php echo $this->__('You will receive an order confirmation email with details of your order and a link to track its progress.') ?></p>
+		<?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
+			<p>
+				<?php #echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
+				<?php #echo $this->getChildHtml() ?>
+			</p>
+		<?php endif;?>
+		<?php endif;?>
+
+		<?php if ($this->getAgreementRefId()): ?>
+			<p><?php echo $this->__('Your billing agreement # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
+		<?php endif;?>
+
+		<?php if ($profiles = $this->getRecurringProfiles()):?>
+		<p><?php echo $this->__('Your recurring payment profiles:'); ?></p>
+		<ul class="disc">
+		<?php foreach($profiles as $profile):?>
+		<?php $profileIdHtml = ($this->getCanViewProfiles() ? sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getProfileUrl($profile)), $this->escapeHtml($this->getObjectData($profile, 'reference_id'))) : $this->escapeHtml($this->getObjectData($profile, 'reference_id')));?>
+			<li><?php echo $this->__('Payment profile # %s: "%s".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
+		<?php endforeach;?>
+		</ul>
+		<?php endif;?>
+
+        <div class="row mt20">
+            <div class="col-sm-3">
+                <?php echo $this->getChildHtml('trustedrating_widget') ?>
+                <?php echo $this->getChildHtml('ts_bp_classic2') ?>
+            </div>
+            <div class="col-sm-6 text-center">
+                <div id="trustedShopsCheckout" style="display:none;"></div>
+                <div id="fb-root"></div>
+                <script>(function(d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (d.getElementById(id)) return;
+                        js = d.createElement(s); js.id = id;
+                        js.src = "//connect.facebook.net/de_DE/sdk.js#xfbml=1&appId=647180435311787&version=v2.0";
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));</script>
+                <div class="fb-like-box" data-href="https://www.facebook.com/brands4living" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true"></div>
+            </div>
+            <div class="col-sm-3">
+                <button type="button" class="button btn btn-green btn-lg pull-right" title="<?php echo $this->__('Continue Shopping') ?>" onclick="window.location='<?php echo $this->getUrl() ?>'"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
+            </div>
+        </div>
+	</div>
+</div>
+
+<?php echo $this->getChildHtml('crosssell') ?>

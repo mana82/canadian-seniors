@@ -1,0 +1,41 @@
+<?
+$current_category = Mage::registry('current_category');
+if($current_category->getLevel() == 2): 
+	$categories = Mage::getModel('catalog/category')->getCollection()
+	                ->addAttributeToSelect('*')
+	                #->addFieldToFilter('homepage_teaser', array('eq' => '1'))
+	                #->addFieldToFilter('include_in_menu',array('eq' => '1'))
+	                ->addFieldToFilter('is_active', array('eq' => '1'))
+					#->addFieldToFilter('thumbnail', array('neq' => ''))
+					->addFieldToFilter('parent_id', array('eq' => $current_category->getId()))
+	                ->addAttributeToSort('position', 'asc');
+	
+	$_imgPath = Mage::getBaseUrl('media').'catalog/category/';
+	
+	$_collectionSize = $categories->count();
+	$_columnCount = 2;
+	
+	if($_collectionSize > 0):?>
+	<? $i=0; foreach ($categories as $key => $_categorie): ?>
+	
+		<?php if ($i++%$_columnCount==0): ?>
+		<div class="row">
+		<? endif; ?>
+		
+			<div class="col-sm-6">
+				<div class="category_teaser">
+					<a href="<?=$_categorie->getUrl() ?>">
+						<div class="name"><? echo $_categorie->getName(); ?></div>
+						<div class="picture">
+							<img src="<?=$_imgPath.$_categorie->getThumbnail() ?>" alt="<? echo $_categorie->getName(); ?>" />
+						</div>
+					</a>
+				</div>
+			</div>
+			
+		<?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+	    </div>
+	    <?php endif ?>
+	<? endforeach ?>
+	<? endif; ?>
+<? endif; ?>

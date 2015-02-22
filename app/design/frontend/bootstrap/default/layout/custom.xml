@@ -1,0 +1,366 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+		<reference name="head">
+			<action method="removeItem"><type>skin_css</type><name>css/styles.css</name></action>
+			<action method="removeItem"><type>skin_css</type><name>css/widgets.css</name></action>
+			<action method="removeItem"><type>skin_css</type><name>css/print.css</name></action>
+			
+			<action method="addItem"><type>skin_css</type><name>css/bootstrap.css</name></action>
+			<action method="addItem"><type>skin_css</type><name>css/bootstrap-glyphicons.css</name></action>
+			<action method="addItem"><type>skin_css</type><name>css/jasny-bootstrap.css</name></action>
+			
+			<action method="addItem"><type>skin_css</type><name>css/bootstrap-custom.css</name></action>
+			
+			<action method="addItem"><type>skin_css</type><name>css/font-awesome.min.css</name></action>
+			<action method="addItem"><type>skin_css</type><name>css/font-awesome-ie7.min.css</name><params/><if>IE 7</if></action>
+			
+			<action method="addItem"><type>skin_css</type><name>css/custom.css</name></action>		
+
+	
+			<action method="removeItem"><type>js</type><name>prototype/prototype.js</name></action>
+			<action method="removeItem"><type>js</type><name>lib/ccard.js</name></action>
+			<action method="removeItem"><type>js</type><name>prototype/validation.js</name></action>
+			<action method="removeItem"><type>js</type><name>scriptaculous/builder.js</name></action>
+			<action method="removeItem"><type>js</type><name>scriptaculous/effects.js</name></action>
+			<action method="removeItem"><type>js</type><name>scriptaculous/dragdrop.js</name></action>
+			<action method="removeItem"><type>js</type><name>scriptaculous/controls.js</name></action>
+			<action method="removeItem"><type>js</type><name>scriptaculous/slider.js</name></action>
+			<action method="removeItem"><type>js</type><name>varien/js.js</name></action>
+			<action method="removeItem"><type>js</type><name>varien/form.js</name></action>
+			<action method="removeItem"><type>js</type><name>varien/menu.js</name></action>
+			<action method="removeItem"><type>js</type><name>mage/translate.js</name></action>
+			<action method="removeItem"><type>js</type><name>mage/cookies.js</name></action>
+
+
+			<action method="addItem"><type>js</type><name>jquery/jquery-1.10.2.min.js</name></action>			
+			<action method="addItem"><type>js</type><name>jquery/prototype.js</name></action>
+			
+			<action method="addItem"><type>js</type><name>lib/ccard.js</name></action>
+			<action method="addItem"><type>js</type><name>prototype/validation.js</name></action>
+			<action method="addItem"><type>js</type><name>scriptaculous/builder.js</name></action>
+			<action method="addItem"><type>js</type><name>scriptaculous/effects.js</name></action>
+			<action method="addItem"><type>js</type><name>scriptaculous/dragdrop.js</name></action>
+			<action method="addItem"><type>js</type><name>scriptaculous/controls.js</name></action>
+			<action method="addItem"><type>js</type><name>scriptaculous/slider.js</name></action>
+			<action method="addItem"><type>js</type><name>varien/js.js</name></action>
+			<action method="addItem"><type>js</type><name>varien/form.js</name></action>
+			<action method="addItem"><type>js</type><name>varien/menu.js</name></action>
+			<action method="addItem"><type>js</type><name>mage/translate.js</name></action>
+			<action method="addItem"><type>js</type><name>mage/cookies.js</name></action>
+			
+			
+			<action method="addItem"><type>skin_js</type><name>js/bootstrap.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>js/custom.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>js/jasny-bootstrap.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>js/holder.js</name></action>
+				
+			
+			
+			<block type="core/text" name="jquery-noConflict"><action method="setText"><text><![CDATA[<script type="text/javascript">jQuery.noConflict()</script>]]></text></action></block>	
+		</reference>
+
+
+
+		<reference name="header">
+			<remove name="store_language" />
+			<block type="checkout/cart_sidebar" name="cart_sidebar" as="topcart" template="page/html/topCart.phtml"/>
+		</reference>
+
+		<reference name="top.menu">
+			<block type="ecw_bootstrap/page_html_topmenu" name="catalog.topnavbootstrap" template="page/html/topmenu.phtml">
+				<!--block type="core/template" name="top.search_nav" template="catalogsearch/form.mini.phtml"/-->
+				<action method="setParentCategoryId"><value>2</value></action>
+			</block>
+            <remove name="catalog.topnav" />
+		</reference>
+		
+		<reference name="footer">
+			<block type="page/switch" name="store_language" as="store_language" template="page/switch/languages.phtml"/>
+			<block type="newsletter/subscribe" name="footer.newsletter" template="newsletter/subscribe.phtml"/>
+		</reference>	
+		
+		<reference name="catalog_category_default">
+			<reference name="root">
+				<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+			</reference>
+		</reference>	
+		
+		<reference name="top.links"> 
+			<action method="removeLinkByUrl">
+				<url helper="checkout/url/getCartUrl" />
+			</action>
+            <action method="removeLinkBlock">
+                <blockName>wishlist_link</blockName>
+            </action>
+			<remove name="checkout_cart_link"/>
+		</reference>
+		
+		<reference name="right">
+			<action method="unsetChild"><name>cart_sidebar</name></action>
+			<remove name="catalog.compare.sidebar" />
+			<remove name="catalog.product.related" />
+			<remove name="right.reports.product.compared" />
+		</reference>
+	</default>
+	
+	<cms_index_index>
+		<!--reference name="content">
+            <block type="catalog/product_new" name="home.catalog.product.new" alias="product_new" template="catalog/product/bestseller.phtml" after="content_row1">
+            	<action method="addPriceBlockType"><type>bundle</type><block>bundle/catalog_product_price</block><template>bundle/catalog/product/price.phtml</template></action>
+            	<action method="setColumnCount"><count>4</count></action>        
+            </block>
+            <block type="core/template" name="homepage_teaser" template="catalog/category/homepage-teaser.phtml" before="cms_page" />
+        </reference-->
+	</cms_index_index>
+	
+    
+    <customer_logged_out>
+        <reference name="top.links">
+            <action method="removeLinkByUrl">
+				<url helper="customer/getAccountUrl" />
+			</action>
+        </reference>
+    </customer_logged_out>
+	
+	
+	<catalog_category_default>
+		<reference name="product_list">
+			
+        </reference>
+        <reference name="left">
+        	<block type="core/template" name="seotext1_left" template="catalog/category/seotext-left.phtml" after="catalog.leftnav" />
+        </reference>
+        <reference name="content">
+        	<block type="core/template" name="seotext2_bottom" template="catalog/category/seotext-bottom.phtml" after="category.products" />
+        </reference>
+        <reference name="category.products">
+        	<block type="catalog/product_new" name="catalog_bestseller" template="catalog/product/bestseller.phtml">
+            	<action method="addPriceBlockType"><type>bundle</type><block>bundle/catalog_product_price</block><template>bundle/catalog/product/price.phtml</template></action>
+            </block>4
+        	<block type="core/template" name="category_teaser" template="catalog/category/category-teaser.phtml" />
+        </reference>
+        <reference name="right">
+        	<remove name="wishlist_sidebar" />
+	    	<remove name="sale.reorder.sidebar"/>
+	    	
+        	<block type="catalog/product_new" name="catalog_bestseller" template="catalog/product/bestseller.phtml">
+            	<action method="addPriceBlockType"><type>bundle</type><block>bundle/catalog_product_price</block><template>bundle/catalog/product/price.phtml</template></action>
+            	<action method="setColumnCount"><value>3</value></action>
+            	<action method="setVerticalLayout"><value>true</value></action>
+            </block>
+        </reference>
+	</catalog_category_default>
+	
+	
+	<catalog_category_layered>
+		<reference name="left">
+			<!-- <block type="catalog/navigation" name="catalog.leftnav2" before="catalog.leftnav" template="catalog/navigation/left.phtml"/> -->
+			<block type="core/template" name="seotext1_left" template="catalog/category/seotext-left.phtml" after="catalog.leftnav" />
+        </reference>
+        <reference name="content">
+        	<block type="core/template" name="seotext2_bottom" template="catalog/category/seotext-bottom.phtml" after="category.products" />
+        </reference>
+        <reference name="category.products">
+        	<block type="catalog/product_new" name="catalog_bestseller" template="catalog/product/bestseller.phtml">
+            	<action method="addPriceBlockType"><type>bundle</type><block>bundle/catalog_product_price</block><template>bundle/catalog/product/price.phtml</template></action>
+            </block>
+        	<block type="core/template" name="category_teaser" template="catalog/category/category-teaser.phtml" />
+        </reference>
+	</catalog_category_layered>
+	
+	
+	<catalog_product_view>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+		</reference>
+		
+
+        <reference name="product.description">
+        	<action method="setTitle" translate="value"><value>Artikelbeschreibung</value></action>
+		</reference>
+		
+		<reference name="product.attributes">     
+            <action method="setTitle" translate="value"><value>Zusatzinformationen</value></action>
+        </reference>
+		
+        <reference name="product.info">     
+			<block type="catalog/product_list_related" name="product.view.related" as="product_view_related" template="catalog/product/list/related.phtml">
+        		<action method="addToParentGroup"><group>detailed_info</group></action>
+				<action method="setTitle" translate="value"><value>Zubehör</value></action>
+				
+                <action method="setData"><name>type</name><value>relatedproducts</value></action>
+                <action method="setData"><name>imagesize</name><value>155x110</value></action>
+            </block>
+            
+            <block type="review/product_view_list" name="product.info.reviews" as="reviews" template="review/product/view/list.phtml">
+				<action method="addToParentGroup"><group>detailed_info</group></action>
+				<action method="setTitle" translate="value"><value>Kundenmeinungen</value></action>				
+				<block type="review/form" name="product.review.form" as="review_form"/> 
+			</block>
+
+            <block type="core/template" name="shipping.tab" as="shipping_tab" template="catalog/product/shipping-tab.phtml">
+                <action method="addToParentGroup"><group>detailed_info</group></action>
+                <action method="setTitle" translate="value"><value>Lieferung &amp; Zahlung</value></action>
+            </block>
+
+            <block type="catalog/product_list_upsell" name="product.info.upsell" as="upsell_products" template="catalog/product/list/upsell.phtml">
+                <action method="setColumnCount"><columns>3</columns></action>
+                <action method="setItemLimit"><type>upsell</type><limit>6</limit></action>
+            </block>
+	    </reference>
+
+        <reference name="right">
+            <remove name="right.reports.product.compared" />
+            <remove name="wishlist_sidebar" />
+            <remove name="sale.reorder.sidebar"/>
+            <action method="unsetChild"><name>cart_sidebar</name></action>
+            <block type="core/template" name="product_view_usp" template="catalog/product/usp-right.phtml" before="-" />
+        </reference>
+	    
+	    <reference name="right.reports.product.viewed">
+        	<action method="addPriceBlockType"><type>bundle</type><block>bundle/catalog_product_price</block><template>bundle/catalog/product/price.phtml</template></action>
+        </reference>
+        
+    </catalog_product_view>
+	
+	<checkout_cart_index>
+		<reference name="checkout.cart">  
+			<block name="checkout.cart.crosssell">
+				<action method="setMaxItems"><MaxItems>3</MaxItems></action>
+			</block>
+		</reference>
+	</checkout_cart_index>
+	
+	<checkout_onepage_index>
+		<reference name="header">
+			<remove name="store_language" />
+			<remove name="catalog.topnavbootstrap" />
+			<remove name="top.search" />
+		</reference>
+	</checkout_onepage_index>
+	
+	<checkout_onepage_success>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+			<block type="checkout/cart_crosssell" name="checkout.success.crosssell" as="crosssell" template="checkout/success/crosssell.phtml">
+            	<action method="addPriceBlockType"><type>bundle</type><block>bundle/catalog_product_price</block><template>bundle/catalog/product/price.phtml</template></action>
+            </block>
+        </reference>
+    </checkout_onepage_success>
+    
+    <checkout_onepage_failure>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+       		<block type="checkout/cart_crosssell" name="checkout.success.crosssell" as="crosssell" template="checkout/success/crosssell.phtml">
+            	<action method="addPriceBlockType"><type>bundle</type><block>bundle/catalog_product_price</block><template>bundle/catalog/product/price.phtml</template></action>
+            </block>
+
+        </reference>
+    </checkout_onepage_failure>
+	
+	<contacts_index_index>
+		<reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+	</contacts_index_index>
+	
+	<catalogsearch_result_index>
+        <reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+		</reference>
+    </catalogsearch_result_index>
+    
+    <catalogsearch_advanced_index>
+        <reference name="root">
+			<action method="setTemplate"><template>page/1column.phtml</template></action>
+		</reference>
+    </catalogsearch_advanced_index>
+    
+    <catalogsearch_advanced_result>
+    	<update handle="page_one_column" />
+        <reference name="root">
+			<action method="setTemplate"><template>page/1column.phtml</template></action>
+		</reference>
+		<reference name="search_result_list">
+			<action method="setColumnCount"><count>4</count></action>
+		</reference>
+    </catalogsearch_advanced_result>
+
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="removeLinkByName"><name>OAuth Customer Tokens</name></action>
+        </reference>
+    </customer_account>
+
+   	<cms_index_noroute translate="label">
+        <label>CMS No-Route Page</label>
+        <reference name="content">
+			<action method="unsetChild"><name>cms.wrapper</name></action>
+			<action method="unsetChild"><name>page_content_heading</name></action>
+			
+			<block name="content_row1" before="-" type="page/html_wrapper" translate="label" >
+					<action method="setElementTagName">
+						<value>div</value>
+					</action>
+					<action method="setElementClass">
+						<value>row</value>
+					</action>
+					<block name="row1_list" type="core/text_list">
+						<block name="content_row1_span3" type="page/html_wrapper" translate="label">
+							<action method="setElementTagName">
+								<value>div</value>
+							</action>
+							<action method="setElementClass">
+								<value>col-sm-3</value>
+							</action>
+							<action method="setElementId">
+								<value>home_navigation</value>
+							</action>
+							<!--
+							<block name="customnav_homepage2" type="ecwtopnavigation/navigation" template="page/html/custommenu.phtml">
+								<action method="setParentCategoryId">
+									<value>38</value>
+								</action>
+							</block>
+							-->
+						</block>
+			            <block name="content_row1_span9" type="page/html_wrapper" translate="label">
+							<action method="setElementTagName">
+								<value>div</value>
+							</action>
+							<action method="setElementClass">
+								<value>col-sm-9</value>
+							</action>
+							
+			                <block type="core/template" name="page_content_heading" template="cms/content_heading.phtml"/>
+				            <block type="page/html_wrapper" name="cms.wrapper" translate="label">
+				                <label>CMS Content Wrapper</label>
+				                <action method="setElementClass"><value>std</value></action>
+				                <block type="cms/page" name="cms_page"/>
+				            </block>
+				            
+				            <block type="core/template" name="search_404" template="cms/404.phtml" />
+				            
+			        	</block>
+					</block>
+				</block>
+			
+            <block type="core/template" name="homepage_teaser" template="catalog/category/homepage-teaser.phtml" after="content_row1" />
+		</reference>
+    </cms_index_noroute>
+   	
+   	<print>
+        <reference name="head">
+        	<action method="addItem"><type>skin_css</type><name>css/bootstrap.css</name></action>
+			<action method="addItem"><type>skin_css</type><name>css/bootstrap-glyphicons.css</name></action>
+			
+			<action method="addItem"><type>skin_css</type><name>css/bootstrap-custom.css</name></action>
+			<action method="addItem"><type>skin_css</type><name>css/custom.css</name></action>
+        </reference>
+    </print>
+</layout>

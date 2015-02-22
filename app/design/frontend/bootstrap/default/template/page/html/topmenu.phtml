@@ -1,0 +1,30 @@
+<?php $_menu = $this->getHtml('level-top') ?>
+<?php if($_menu): ?>
+<div class="navbar navbar-default">
+	<!--
+	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+	  <span class="icon-bar"></span>
+	  <span class="icon-bar"></span>
+	  <span class="icon-bar"></span>
+	</button>
+	<div class="nav-collapse collapse">
+	-->
+		<ul id="nav" class="nav navbar-nav">
+			<li><a href="<?=Mage::helper('core/url')->getHomeUrl(); ?>"><i class="icon-home icon-large"></i></a></li>
+			<?php echo $_menu ?>
+		</ul>
+		<?php #echo $this->getChildHtml('top.search_nav'); ?>
+</div>
+<?php endif ?>
+<script>
+jQuery('ul li.dropdown').hover(
+	function() {
+		jQuery(this).addClass('open');
+		//$(this).children('.dropdown-menu').stop(true, true).delay(100).fadeIn(250);
+	}, 
+	function() {
+		jQuery(this).removeClass('open');
+		//$(this).children('.dropdown-menu').stop(true, true).delay(100).fadeOut(250);
+	}
+);
+</script>

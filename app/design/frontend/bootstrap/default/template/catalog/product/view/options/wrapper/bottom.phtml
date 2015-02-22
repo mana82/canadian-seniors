@@ -1,0 +1,10 @@
+<?php $_product = $this->getProduct(); ?>
+<? if($_product->getData('options_container') == 'container2'): ?>
+<div class="product-options-bottom panel panel-default">
+	<div class="panel-body">
+<? endif; ?>
+    	<?php echo $this->getChildHtml('', true, true);?>
+<? if($_product->getData('options_container') == 'container2'): ?>
+	</div>
+</div>
+<? endif; ?>

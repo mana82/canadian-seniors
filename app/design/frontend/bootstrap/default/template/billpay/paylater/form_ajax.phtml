@@ -1,0 +1,133 @@
+<?php
+
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @package    Billpay
+ * @author 	   Jan Wehrs <jan.wehrs@billpay.de>
+ * @copyright  Copyright (c) 2009 Billpay GmbH
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+
+<script type="text/javascript">
+    window.billpayLoadingComplete_PayLater = function (transport) {
+        var response;
+        if (transport && transport.responseText) {
+
+            try {
+                response = eval('(' + transport.responseText + ')');
+            } catch (e) {
+                response = {};
+            }
+        }
+
+        $('billpay-ajax-paylater-container-loading').hide();
+
+        if (response.update_section) {
+
+            $('billpay-ajax-container-paylater').update(response.update_section.html);
+
+            // check if js is included in the response and eval it
+            var scripts = '';
+            response.update_section.html.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, function(all, code){
+                scripts += code + '\n';
+                return '';
+            });
+            if (scripts.length > 0) {
+                var script = document.createElement('script');
+                script.setAttribute('type', 'text/javascript');
+                script.text = scripts;
+                document.head.appendChild(script);
+                document.head.removeChild(script);
+            }
+
+            jQuery(this).delay(4000).queue(function(){
+
+                jQuery("#available_payment_methods div.bpy-rateslider-circle").click( function () {
+
+                    var minHeight = parseInt(jQuery('#checkout_totals').css('minHeight'));
+                    jQuery('#checkout_totals').html('<img style="margin-top: ' + ((minHeight/2)-16) +'px" src="<?php echo $this->getSkinUrl('images/ajax-loader.gif') ?>" />');
+
+                    var form_data = jQuery('#co-payment-form').serialize() + "&form_key="+jQuery('input[name=form_key]').val();
+
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: '<?php echo $this->getUrl('checkout/onepage/savePayment') ?>?update=1',
+                        data: form_data,
+                        success: function (msg) {
+                            jQuery('#checkout_totals').html(msg);
+                        }
+                    });
+                });
+            });
+
+        }
+    }
+
+    window.billpayLoadingError_PayLater = function () {
+        location.href = "<?php echo $this->getUrl('checkout/cart', array("_secure" => true)) ?>";
+    }
+
+    window.billpayPaymentSelected_PayLater = function () {
+        $('billpay-ajax-container-paylater').update('');
+        $('billpay-ajax-paylater-container-loading').show();
+
+        new Ajax.Request(
+            "<?php echo $this->getUrl('billpay/checkout/formPayLater', array("_secure" => true)) ?>",
+            {
+                method:'post',
+                onSuccess: window.billpayLoadingComplete_PayLater,
+                onFailure: window.billpayLoadingError_PayLater
+            }
+        );
+    }
+
+    var billpayRadio_PayLater = $('p_method_billpay_paylater');
+    if (billpayRadio_PayLater && !billpayRadio_PayLater.isBillpayBinded) {
+        billpayRadio_PayLater.observe('click', function(event) {
+            window.billpayPaymentSelected_PayLater();
+            billpayRadio_PayLater.isBillpayBinded = true;
+        })
+    }
+
+    <?php if($this->isPaymentSelected()): ?>
+        window.billpayPaymentSelected_PayLater();
+    <?php endif; ?>
+</script>
+
+<ul id="payment_form_billpay_paylater" class="form-list" style="display: none">
+    <li style="min-height: 18px;">
+        <style type="text/css">
+            .sp-methods .bpy-paylater-opt-in-text label {
+                line-height: 18px;
+            }
+            .sp-methods .bpy-paylater-opt-in-text label a {
+                float: none;
+                text-decoration: underline;
+                margin: 0;
+            }
+            .bpy * {
+                box-sizing: content-box;
+            }
+
+        </style>
+        <!-- Loading panel -->
+        <span id="billpay-ajax-paylater-container-loading" style="display:none; margin-top:10px; margin-left:25px; color:#9C9C9C; ">
+            <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" />&nbsp;
+            <?php echo $this->__('loading_text'); ?>
+        </span>
+
+        <div id="billpay-ajax-container-paylater"></div>
+    </li>
+</ul>

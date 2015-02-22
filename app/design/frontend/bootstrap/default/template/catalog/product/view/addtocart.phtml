@@ -1,0 +1,27 @@
+<?php $_product = $this->getProduct(); ?>
+<?php $buttonTitle = $this->__('Add to Cart'); ?>
+<?php if($_product->isSaleable()): ?>
+    <div class="add-to-cart row">
+        <?php if(!$_product->isGrouped()): ?>
+        <div class="col-sm-5">
+	        <div class="row form-group ">
+		        <label for="qty" class="control-label col-sm-5"><?php echo $this->__('Qty:') ?></label>
+		        <div class="col-sm-7">
+		        	<select type="text" name="qty" id="qty" maxlength="12" title="<?php echo $this->__('Qty') ?>" class="input-text qty form-control">
+		        		<? for ($i=1; $i < 51; $i++): ?> 
+		        		<? $selected = (($this->getProductDefaultQty() * 1)==$i) ? ' selected="selected"' : ''; ?>
+							<option<?=$selected ?>><?=$i ?></option>
+						<? endfor; ?>
+		        	</select>
+		        </div>
+		    </div>
+		</div>
+		<div class="col-sm-7">
+		<?php else: ?>
+		<div class="col-sm-7 pull-right">
+        <?php endif; ?>
+        	<button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart btn btn-warning btn-lg btn-block" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button>
+        </div>
+        <?php echo $this->getChildHtml('', true, true) ?>
+    </div>
+<?php endif; ?>

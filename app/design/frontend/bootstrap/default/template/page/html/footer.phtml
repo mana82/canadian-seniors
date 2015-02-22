@@ -1,0 +1,29 @@
+	</div>
+</div>
+<div class="footer-wrapper">
+	<div class="footer container">
+		<div class="row">
+				<div class="col-sm-3 service">
+					<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_col_1')->toHtml() ?>
+				</div>
+				<div class="col-sm-3 leistungen">
+					<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_col_2')->toHtml() ?>
+				</div>
+				<div class="col-sm-3 social">
+					<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_col_3')->toHtml() ?>
+				</div>
+				<div class="col-sm-3">
+					<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_col_4')->toHtml() ?>
+					
+					<?php echo $this->getChildHtml('footer.newsletter') ?>
+				</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<?php #echo $this->getChildHtml('footer_links') ?>
+				
+				<div class="priceinfo"><?php echo $this->getCopyright() ?></div>
+			</div>
+		</div>
+	</div>
+</div>

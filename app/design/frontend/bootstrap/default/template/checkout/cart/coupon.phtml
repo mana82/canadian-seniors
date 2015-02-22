@@ -1,0 +1,44 @@
+<div class="discount panel panel-default">
+	<div class="panel-heading">
+		<?php echo $this->__('Gutscheine') ?>
+	</div>
+	<div class="discount-form panel-body">
+		<form id="discount-coupon-form" class="form-horizontal" action="<?php echo $this->getUrl('checkout/cart/couponPost') ?>" method="post">
+			<p><?php echo $this->__('Enter your coupon code if you have one.') ?></p>
+			<input type="hidden" name="remove" id="remove-coupone" value="0" />
+			
+			<div class="form-group">
+				<? /*<label for="coupon_code" class="col-sm-2 control-label">Code</label>*/ ?>
+				<div class="col-sm-12">
+					<input placeholder="Gutscheincode" class="input-text form-control" id="coupon_code" name="coupon_code" value="<?php echo $this->htmlEscape($this->getCouponCode()) ?>" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-12 btn-group-vertical">
+					<button type="button" title="<?php echo $this->__('Gutscheincode einlösen') ?>" class="button btn btn-default btn-block" onclick="discountForm.submit(false)" value="<?php echo $this->__('Apply Coupon') ?>">
+						<?php echo $this->__('Gutscheincode einlösen') ?>
+					</button>
+					<?php if(strlen($this->getCouponCode())): ?>
+						<button type="button" title="<?php echo $this->__('Cancel Coupon') ?>" class="button btn btn-default btn-block" onclick="discountForm.submit(true)" value="<?php echo $this->__('Cancel Coupon') ?>"><span><span><?php echo $this->__('Cancel Coupon') ?></span></span></button>
+					<?php endif;?>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var discountForm = new VarienForm('discount-coupon-form');
+discountForm.submit = function (isRemove) {
+    if (isRemove) {
+        $('coupon_code').removeClassName('required-entry');
+        $('remove-coupone').value = "1";
+    } else {
+        $('coupon_code').addClassName('required-entry');
+        $('remove-coupone').value = "0";
+    }
+    return VarienForm.prototype.submit.bind(discountForm)();
+}
+//]]>
+</script>

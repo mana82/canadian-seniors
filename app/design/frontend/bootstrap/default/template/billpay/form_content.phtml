@@ -1,0 +1,291 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @package    Billpay
+ * @author 	   Jan Wehrs <jan.wehrs@billpay.de>
+ * @copyright  Copyright (c) 2009 Billpay GmbH
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+/**
+ * @var Billpay_Block_FormContent $this
+ */
+?>
+<style type="text/css">
+    .bpy-border {
+        border: 1px solid #c0c0c0;
+        padding: 10px;
+    }
+    #firecheckout-form .bpy-border,
+    #onestepcheckout-form .bpy-border {
+        border: 0;
+        padding: 0;
+    }
+    .form-list .bpy-input-row {
+        min-height: 23px;
+        width: 100%;
+    }
+    #firecheckout-form .bpy-input-row,
+    #onestepcheckout-form .bpy-input-row {
+        margin-bottom: 4px;
+    }
+    .bpy-input-row label {
+        width: 130px;
+        display: inline-block;
+    }
+    #b2b .bpy-input-row label {
+        width: 180px;
+    }
+    .bpy-terms-box {
+        margin-top: 15px;
+    }
+    .bpy-terms-box input {
+        float: left;
+        margin: 5px;
+    }
+    .bpy-terms-box .bpy-terms-box-text {
+        float: none;
+        padding: 5px 0;
+        overflow: hidden;
+        font-weight:normal;
+        line-height:10px;
+        font-size:11px
+    }
+    #firecheckout-form .bpy-terms-box .bpy-terms-box-text {
+        display: inline;
+    }
+    .bpy-terms-box .bpy-terms-box-text label {
+        font-weight: normal;
+    }
+    .bpy-terms-box-text > label * {
+        color: #666;
+    }
+    #onestepcheckout-form .input-box table {
+        width: 95%;
+    }
+    .sp-methods .bpy-terms-box-text label {
+        line-height: 18px;
+    }
+    .sp-methods .bpy-terms-box-text label a {
+        float: none;
+        text-decoration: underline;
+        margin: 0px;
+    }
+    .bpyImgLogoSmall {
+        background: url("data:image/png;base64,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");
+        width: 100px;
+        height: 28px;
+    }
+</style>
+
+<li>
+    <?php echo $this->getTestModeInfoBoxHtml() ?>
+</li>
+
+<li class="bpy-border">
+
+    <?php
+    if ($this->getShowGenderSelect()
+        || $this->getShowDobSelect()
+        || $this->getShowBankAccount()
+        || $this->getFeeChargeEnabled()):
+    ?>
+
+        <?php if($this->getB2BEnabled()): ?>
+
+            <?php if ($this->getAllowedCustomerGroup() == 'both'): ?>
+                <label>
+                    <input type="radio"
+                           name="payment[<?php echo $this->getMethodCode() ?>_customer_group]" value="b2c"
+                           onchange="changeCustomerGroupValidator(0)"
+                           <?php echo $this->getSelectedCustomerGroup() == true ? '' : 'checked="checked"'; ?>/>
+                    <?php echo $this->__('billpay_private_customer')?>
+                    <?php if ($this->getFeeCharged()): ?>
+                        <span style="font-weight: normal;">
+                            <?php
+                            echo $this->__('billpay_title_fee_text1');
+                            echo $this->getChargedFee();
+                            ?>
+                        </span>
+                    <?php endif; ?>
+                </label>
+                <br />
+                <label>
+                    <input type="radio" id="<?php echo $this->getMethodCode() ?>_customer_group_b2b"
+                           name="payment[<?php echo $this->getMethodCode() ?>_customer_group]" value="b2b"
+                           onchange="changeCustomerGroupValidator(1)"
+                           <?php echo $this->getSelectedCustomerGroup() == true ? 'checked="checked"' : ''; ?>/>
+                    <?php echo $this->__('billpay_business_customer')?>
+                    <?php if($this->getFeeChargedB2B()): ?>
+                        <span style="font-weight: normal;">
+                            <?php
+                            echo $this->__('billpay_title_fee_text1');
+                            echo $this->getChargedFeeB2B();
+                            ?>
+                        </span>
+                    <?php endif; ?>
+                </label>
+                <br/>
+            <?php endif; ?>
+
+            <div id="b2b" style="display: <?php echo $this->getSelectedCustomerGroup()==true ? 'block' : 'none'; ?>">
+
+                <div class="bpy-input-row input-box">
+                    <label for="<?php echo $this->getMethodCode() ?>_company_name">
+                        <?php echo $this->__('billpay_company_name')?>
+                        <span class="required">*</span>
+                    </label>
+                    <input class="input-text required-entry" type="text"
+                           id="<?php echo $this->getMethodCode() ?>_company_name"
+                           name="payment[<?php echo $this->getMethodCode() ?>_company_name]"
+                           value="<?php echo $this->getSelectedCompanyName()?>" />
+                </div>
+
+                <div class="bpy-input-row input-box">
+                    <label for="billpay-legal-form-select">
+                        <?php echo $this->__('billpay_legal_form'); ?>
+                        <span class="required">*</span>
+                    </label>
+                    <?php echo $this->getLegalFormSelectHtml(); ?>
+                </div>
+
+                <?php if ($this->getShowGenderSelect()): ?>
+                    <div class="bpy-input-row input-box">
+                        <label for="billpay-salutation-select">
+                            <?php echo $this->__('billpay_salutation')?>
+                            <span class="required">*</span>
+                        </label>
+                        <?php echo $this->getSalutationSelectHtml() ?>
+                    </div>
+                <?php endif;?>
+
+                <div class="bpy-input-row input-box">
+                    <label for="<?php echo $this->getMethodCode() ?>_register_number">
+                        <?php echo $this->__('billpay_register_number')?>
+                    </label>
+                    <input class="input-text" type="text"
+                           id="<?php echo $this->getMethodCode() ?>_register_number"
+                           name="payment[<?php echo $this->getMethodCode() ?>_register_number]"
+                           value="<?php echo $this->getRegisterNumber()?>" />
+                </div>
+
+                <div class="bpy-input-row input-box">
+                    <label for="<?php echo $this->getMethodCode() ?>_tax_number">
+                        <?php echo $this->__('billpay_tax_number')?>
+                    </label>
+                    <input class="input-text" type="text"
+                           id="<?php echo $this->getMethodCode() ?>_tax_number"
+                           name="payment[<?php echo $this->getMethodCode() ?>_tax_number]"
+                           value="<?php echo $this->getTaxNumber()?>" />
+                </div>
+
+                <div class="bpy-input-row input-box">
+                    <label for="<?php echo $this->getMethodCode() ?>_holder_name">
+                        <?php echo $this->__('billpay_holder_name')?>
+                    </label>
+                    <input class="input-text" type="text"
+                           id="<?php echo $this->getMethodCode() ?>_holder_name"
+                           name="payment[<?php echo $this->getMethodCode() ?>_holder_name]"
+                           value="<?php echo $this->getHolderName()?>" />
+                </div>
+
+                <span style="font-size:11px; font-style:italic">
+                    <?php echo $this->__('billpay_contact_person')?>:
+                    <?php echo $this->getContactPerson()?>
+                </span>
+            </div>
+        <?php endif; ?>
+
+        <?php
+        $visible = 'block';
+        if ($this->getB2BEnabled()
+            && (($this->getAllowedCustomerGroup()=='both'
+                 && $this->getSelectedCustomerGroup() == true)
+                || $this->getAllowedCustomerGroup() == 'b2b')
+        ) {
+            $visible = 'none';
+        }
+        ?>
+
+        <div id="b2c" style="display: <?php echo $visible; ?>">
+
+            <?php if ($this->getShowGenderSelect()
+                      && ($this->getB2BEnabled() == false
+                          || $this->getMethodCode() != 'billpay_rec'
+                          || $this->getAllowedCustomerGroup() != 'b2b')): ?>
+                <div class="bpy-input-row input-box">
+                    <label>
+                        <?php echo $this->__('gender'); ?>
+                        <span class="required">*</span>
+                    </label>
+                    <?php echo $this->getGenderSelectHtml() ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($this->getShowDobSelect()): ?>
+                <div class="bpy-input-row input-box">
+                    <label>
+                        <?php echo $this->__('date_of_birth') ?>
+                        <span class="required">*</span>
+                    </label>
+                    <?php echo $this->getDobSelectHtml() ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($this->getShowBankAccount()): ?>
+                <?php if ($this->getShowGenderSelect() || $this->getShowDobSelect()):?>
+                    <br/>
+                <?php endif; ?>
+                <div>
+                    <?php echo $this->__('billpay_enter_account_data') ?>
+                </div>
+                <div style="margin-top:10px;">
+                    <?php echo $this->getBankAccountHtml() ?>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <?php if($this->getShowFeeChargeInfoText()): ?>
+            <div style="margin-top:20px">
+                <label style="font-weight:normal">
+                    <?php if ($this->getFeeChargeInfoValue()): ?>
+                        <?php echo $this->__('billpay_fee_charged_info1'); ?>
+                        <?php echo $this->getFeeChargeInfoValue(); ?>
+                        <?php echo $this->__('billpay_fee_charged_info2'); ?>
+                    <?php else: ?>
+                        <?php echo $this->__('billpay_fee_charged_info3'); ?>
+                    <?php endif; ?>
+                </label>
+            </div>
+        <?php endif; ?>
+    <?php
+    endif;
+    ?>
+    <div class="bpy-terms-box">
+        <input id="<?php echo $this->getMethodCode() ?>_tcaccepted"
+               name="payment[<?php echo $this->getMethodCode() ?>_tcaccepted]"
+               type="checkbox" class="radio required-entry"/>
+        <div class="bpy-terms-box-text">
+            <label for="<?php echo $this->getMethodCode() ?>_tcaccepted">
+                <?php echo $this->getAcceptTermsHtml() ?>
+            </label>
+            <?php echo $this->getAdditionalSepaInformationHtml() ?>
+        </div>
+    </div>
+    <div style="margin-top:7px; margin-bottom:3px">
+        <div class="bpyImgLogoSmall"></div>
+    </div>
+    <div style="height:1px" >
+        <?php echo $this->getFraudDetectionHtml() ?>
+    </div>
+</li>

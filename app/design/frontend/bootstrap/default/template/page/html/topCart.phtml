@@ -1,0 +1,20 @@
+<?php 
+$_cartQty = $this->getSummaryCount();
+?>
+<div class="mini-cart">
+	<div class="row">
+		<div class="col-sm-5 col-md-5 col-lg-6 header-usp">
+			<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_usp')->toHtml() ?>
+		</div>
+		<div class="col-sm-7 col-md-7 col-lg-6 mini-cart-content">
+			<div class="text-right">
+				<div class="pull-right">
+					<span class="glyphicon glyphicon-shopping-cart icon-2x"></span>
+				</div>
+				<a href="<? echo $this->getUrl('checkout/cart') ?>">
+					<?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?> (<?php echo $_cartQty == null ? 0 : $_cartQty ?>)<br />
+				<? echo $this->__('Zum Warenkorb') ?></a>
+			</div>
+		</div>
+	</div>
+</div>

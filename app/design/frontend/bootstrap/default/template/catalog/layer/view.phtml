@@ -1,0 +1,37 @@
+<?php
+/**
+ * Category layered navigation
+ *
+ * @see Mage_Catalog_Block_Layer_View
+ */
+?>
+<?php if($this->canShowBlock()): ?>
+
+    <?php if ($this->getLayer()->getState()->getFilters()): ?>
+        <div class="panel panel-default hidden-xs">
+            <div class="panel-heading"><?php echo $this->__('Currently Shopping by:') ?></div>
+            <div class="panel-body">
+                <?php echo $this->getStateHtml() ?>
+
+                <a class="btn btn-warning btn-sm pull-right" href="<?php echo $this->getClearUrl() ?>"><?php echo $this->__('Clear All') ?></a>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if($this->canShowOptions()): ?>
+        <? /*<div class="panel panel-default hidden-xs">
+		<div class="panel-heading"><?php echo $this->__('Shop By') ?></div> */ ?>
+        <?php $_filters = $this->getFilters() ?>
+        <?php foreach ($_filters as $_filter): ?>
+            <?php if($_filter->getItemsCount()): ?>
+                <div class="panel panel-default hidden-xs">
+                    <div class="panel-heading"><strong><?php echo $this->__($_filter->getName()) ?></strong></div>
+                    <div class="panel-body">
+                        <?php echo $_filter->getHtml() ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <? /*</div>*/?>
+    <?php endif; ?>
+<?php endif; ?>

@@ -1,0 +1,106 @@
+<?php 
+$_columnCount = 2;
+?>
+<?php if($this->getItems()->getSize()): ?>
+<div class="block block-related">
+    <div class="h2">
+        <span><?php echo $this->__('Related Products') ?></span>
+    </div>
+    <div class="block-content">
+		<p class="block-subtitle"><?php echo $this->__('Check items to add to the cart or') ?>&nbsp;<a href="#" onclick="selectAllRelated(this); return false;"><?php echo $this->__('select all') ?></a></p>
+		<ol class="category-products unstyled row-fluid related" id="products-list">
+        	
+        <?php $i=0; foreach($this->getItems() as $_item): ?>
+	        <?php $i++; if ($i==1): ?>
+            	<ul class="products-grid unstyled thubmnails row-fluid" style="margin-bottom: 10px">
+            <?php endif ?>
+	        	
+	        	<?php if($_item->isComposite() && !$_item->isSaleable()): ?>
+	        		<? continue; ?>
+	        	<?php endif; ?>
+	            <li class="item<?=$i ?> thumbnail span6 <?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
+	            	<div class="row-fluid ">
+	            		<div class="span4">
+			                <a href="<?php echo $_item->getProductUrl() ?>" class="product-image" target="_blank">					
+			                	<img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(200,200) ?>" alt="<?php echo $this->htmlEscape($_item->getName()) ?>" />
+			                </a>
+		                </div>
+		                
+		                <div class="span8">
+			                <div class="caption">
+								<div class="product-name">
+									<?php if (!$_item->getRequiredOptions()): ?>
+									<div class="pull-right">
+				                        <input type="checkbox" class="checkbox related-checkbox" id="related-checkbox-<?php echo $_item->getId() ?>" name="related_products[]" value="<?php echo $_item->getId() ?>" />
+				                        <input type="hidden" id="related-quantity-<?php echo $_item->getId(); ?>" value="2">
+				                    </div>
+				                    <?php endif; ?>
+		                    
+									<?php echo $this->htmlEscape($_item->getName()) ?>
+								</div>
+								<div class="desc">
+			                        <?php echo $_item->getShortDescription() ?>
+			                    </div>
+			                    
+								<?php echo $this->getPriceHtml($_item, true) ?>
+								
+							</div>
+						</div>
+						<hr />
+					</div>
+				</li>
+	        <?php if ($i == $_columnCount): $i=0; ?>
+            	</ul>
+        	<?php endif ?>        
+        	
+		<?php endforeach; ?>
+		</ol>
+        <script type="text/javascript">decorateList('block-related', 'none-recursive')</script>
+    </div>
+    <script type="text/javascript">
+    //<![CDATA[
+    $$('.related-checkbox').each(function(elem){
+        Event.observe(elem, 'click', addRelatedToProduct)
+    });
+
+    var relatedProductsCheckFlag = false;
+    function selectAllRelated(txt){
+        if (relatedProductsCheckFlag == false) {
+            $$('.related-checkbox').each(function(elem){
+                elem.checked = true;
+            });
+            relatedProductsCheckFlag = true;
+            txt.innerHTML="<?php echo $this->__('unselect all') ?>";
+        } else {
+            $$('.related-checkbox').each(function(elem){
+                elem.checked = false;
+            });
+            relatedProductsCheckFlag = false;
+            txt.innerHTML="<?php echo $this->__('select all') ?>";
+        }
+        addRelatedToProduct();
+    }
+
+    function addRelatedToProduct(){
+        var checkboxes = $$('.related-checkbox');
+        var values = [];
+        for(var i=0;i<checkboxes.length;i++){
+            if(checkboxes[i].checked) {
+                checkboxId = checkboxes[i].id;
+                checkboxIdParts = checkboxId.split('-');
+                itemId = checkboxIdParts[checkboxIdParts.length-1];
+                quantity = $('related-quantity-'+itemId).value;
+                value = checkboxes[i].value+';'+quantity;
+                values.push(checkboxes[i].value);
+                //values.push(value);
+            }
+        }
+        if($('related-products-field')){
+            $('related-products-field').value = values.join(',');
+        }
+    }
+    
+    //]]>
+    </script>
+</div>
+<?php endif ?>

@@ -1,0 +1,57 @@
+<?php if (($_products = $this->getProductCollection()) && $_products->getSize()): ?>
+<hr />
+<div class="subtitle lead"><?php echo $this->__('New Products') ?></div>
+<?php $_columnCount = $this->getColumnCount(); ?>
+<?php $_image_resize = 135; ?>
+    <?php $i=0; foreach ($_products->getItems() as $_product): ?>
+        <?php if ($i++%$_columnCount==0): ?>
+        <div class="products-grid row">
+        <?php endif ?>
+            <div class="col-sm-6 col-md-3 col-lg-3 item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
+            	<div class="thumbnail">
+            		<div class="text-center">
+	                	<a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($_image_resize) ?>" width="<?=$_image_resize ?>" height="<?=$_image_resize ?>" alt="<?php echo $this->htmlEscape($_product->getName()) ?>" /></a>
+	                </div>
+	                <div class="caption">
+		                <div class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>"><?php echo $this->htmlEscape($_product->getName()) ?></a></div>
+		                <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
+		                <?php echo $this->getPriceHtml($_product, true, '-new') ?>
+		                <div class="actions">
+		                    <?php if($_product->isSaleable()): ?>
+		                        <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart btn btn-primary" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+		                    <?php else: ?>
+		                        <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+		                    <?php endif; ?>
+		                    <? /*
+		                    <ul class="add-to-links">
+		                        <?php if ($this->helper('wishlist')->isAllow()) : ?>
+		                            <li><a href="<?php echo $this->getAddToWishlistUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+		                        <?php endif; ?>
+		                        <?php if ($_compareUrl = $this->getAddToCompareUrl($_product)): ?>
+		                            <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
+		                        <?php endif; ?>
+		                    </ul>
+							 * 
+							 */?>
+		                </div>
+		            </div>
+	        	</div>
+            </div>
+        <?php if ($i%$_columnCount==0 || $i==count($_products)): ?>
+        </div>
+        <?php endif ?>
+    <?php endforeach; ?>
+<script>
+jQuery(document).ready(function ($) {
+	var imageHeight = <?php echo $_image_resize ?>;
+	var heights = $(".products-grid .item").map(function (){ return $(this).height(); }).get();
+	maxHeight = Math.max.apply(null, heights)
+	
+	if(maxHeight <= imageHeight){
+		 maxHeight = maxHeight + imageHeight;
+	}
+   
+    $('.products-grid .item .thumbnail').css('height',maxHeight+'px');
+});
+</script>
+<?php endif; ?>

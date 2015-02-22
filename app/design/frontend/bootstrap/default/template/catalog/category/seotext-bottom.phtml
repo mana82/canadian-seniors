@@ -1,0 +1,7 @@
+<? if ($current_category = Mage::registry('current_category')): ?>
+    <? if($current_category->hasData('seo_bottom_text') && trim($current_category->getData('seo_bottom_text')) != ""): ?>
+        <div class="seo_bottom_text">
+            <? echo $current_category->getData('seo_bottom_text'); ?>
+        </div>
+    <? endif; ?>
+<? endif; ?>

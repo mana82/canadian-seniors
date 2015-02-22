@@ -1,0 +1,33 @@
+<?php
+/* @var $this Mage_Core_Block_Template */
+/* @var $catalogSearchHelper Mage_Catalogsearch_Helper_Data */
+$catalogSearchHelper =  $this->helper('catalogsearch');
+?>
+<div class="row">
+	<div class="col-sm-6">
+		<form id="search_mini_form_404" class="" action="<?php echo $catalogSearchHelper->getResultUrl() ?>" method="get" role="search">
+			<div class="form-group">
+				<div class="input-group">
+					<input id="search_404" type="text" name="<?php echo $catalogSearchHelper->getQueryParamName() ?>" value="<?php echo $catalogSearchHelper->getEscapedQueryText() ?>" class="form-control"  maxlength="<?php echo $catalogSearchHelper->getMaxQueryLength();?>" />
+					<span class="input-group-btn">
+						<button type="submit" title="<?php echo $this->__('Search') ?>" class="btn btn-success">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</span>
+				</div>
+			</div>
+			<script type="text/javascript">
+			//<![CDATA[
+				var searchForm = new Varien.searchForm('search_mini_form_404', 'search_404', '<?php echo $this->__('Produkt suchen...') ?>');
+			//]]>
+			</script>
+		</form>
+		<p>
+			Schauen Sie auch auf unsere Startseite nach Produkten: <br /><a href="/">Zur Startseite</a>
+		</p>
+		<p>
+			Oder nehmen Sie mit uns Kontakt auf: <a href="/contacts/">Kontakt aufnehmen</a>
+		</p>
+
+	</div>
+</div>

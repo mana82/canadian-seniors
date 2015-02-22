@@ -1,0 +1,40 @@
+<?php
+/**
+ * Category left navigation
+ *
+ * @see Mage_Catalog_Block_Navigation
+ */
+?>
+<?php if (!Mage::registry('current_category')) return ?>
+<?php $_categories = $this->getCurrentChildCategories() ?>
+<?php $_count = is_array($_categories)?count($_categories):$_categories->count(); ?>
+
+<?php if($_count): ?>
+	<? $current_category = Mage::registry('current_category')->getName(); ?>
+<?php else: ?>
+	<?php $parent_id = Mage::registry('current_category')->getParentId() ?>
+	<?php $parent_category = Mage::getModel('catalog/category')->load( $parent_id ) ?>
+	<?php $_categories = $parent_category->getChildrenCategories(); ?>
+	
+	<? $current_category = $parent_category->getName(); ?>
+	<?php $_count = is_array($_categories)?count($_categories):$_categories->count(); ?>
+<?php endif; ?>
+
+
+<div class="block block-layered-nav">
+    <? /* <div class="block-title">
+        <strong><span><?php echo $this->__('Browse By') ?></span></strong>
+    </div> */ ?>
+    <div class="block-content panel panel-default">
+    	<div class="panel-body">
+	        <ul class="list-unstyled">
+	        	
+	        <?php foreach ($_categories as $_category): ?>
+	            <?php if($_category->getIsActive()): ?>
+	                <li><a href="<?php echo $this->getCategoryUrl($_category) ?>" class="<?php if ($this->isCategoryActive($_category)): ?> active<?php endif; ?>"><?php echo $this->htmlEscape($_category->getName()) ?> <span class="">(<?php echo $_category->getProductCount() ?>)</span></a></li>
+	            <?php endif; ?>
+	        <?php endforeach ?>
+	        </ul>
+	    </div>
+    </div>
+</div>

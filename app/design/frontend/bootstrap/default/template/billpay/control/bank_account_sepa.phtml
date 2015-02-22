@@ -1,0 +1,135 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @package      Billpay
+ * @author       Jan Wehrs <jan.wehrs@billpay.de>
+ * @copyright    Copyright (c) 2009 Billpay GmbH
+ * @license      http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+/**
+ * @var Billpay_Block_Control_BankAccount $this
+ */
+?>
+<style type="text/css">
+    .billpay_bank_account tr {
+        height: 23px;
+        width: 130px;
+    }
+    .billpay_bank_account tr td:first-child {
+        color: #666;
+    }
+    .billpay_bank_account .input-text {
+        width: <?php echo $this->getFieldWidth(); ?>px;
+    }
+    .bpy-btn-sepa-info-popup {
+        position: absolute;
+        background: silver;
+        padding: 1px 5px;
+        line-height: 10px;
+        font-size: 12px;
+        color: #fff;
+        margin-left: 5px;
+        font-weight: bold;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QsSDxoX1xYzdQAAAgpJREFUOMuNkstLVVEUxn/fOedezVdqUUhYRIhi1iTwNIg4tybda0QFTfoDomY1CIJoEASNmlUgBE0iKAdBhFIYWkkPIQppEDQoguJikY/UMO7Zq8E592o+om+w2Y+1fuvbe23t2t+DH7stwHGkzQLALI4NzyuvDM/zKnOgKHRXJb0P/NhtAJ4BrUoDzIwd2ztob9uGmfH67RgfP30mCAKkBIpx0QWu08PoAFolWUrHOcfOrk4k0dzUyKUL51i/rrlcPTGCAXY4QKRIVKb7vk/fvfuUSjEN9XUcPdRDS8tGfkxMlh2kg+oCSRXsYsWxA6C2ppbJqSm+fC0u2E+qJW+zUrIknHPUrKmm79YNrvbeZPzb978AZQWsop8zs1y7cpmBR4M8fDzE2oYGzGwZxFsNEMcxXZ3tPBl5SXVVVcXZElmQdAQqzQGZGc1Njew7eIxsJkM2m11ewQykjGcwp8oOShgw/3ue54MP7PzZ08zMzNoCP41N3BT9TVvbpjHLIbUu9iKJN2Pv9HTkhZv79cvzPM+B0gISxiTijMJcAQdZmR0B9qQXFWBxqZTxff9E+skk6baZTYA+SNwBigCEUX7Fh+yOCtfDXN7CqGDdUf7U0vMwV0D8Q91RflpSvZmdHB0e6F0pZtU2hlF+L1gJOFBODqPC/38kM5sy1DE63D++O9eDw/FqqH9Z3B9XJNF5PVZDDwAAAABJRU5ErkJggg==");
+        text-indent: -9999px;
+        height: 13px;
+        width: 16px;
+    }
+    .bpy-popup {
+        position: absolute;
+        background: #fff;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 1px solid #c0c0c0;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -moz-box-shadow:    -5px 5px 14px 5px #c0c0c0;
+        -webkit-box-shadow: -5px 5px 14px 5px #c0c0c0;
+        box-shadow:         -5px 5px 14px 5px #c0c0c0;
+        height: 290px;
+        width: 290px;
+        padding: 15px;
+    }
+    .bpy-external-popup iframe {
+        height: 290px;
+        width: 290px;
+    }
+    .bpy-popup .bpy-popup-close {
+        position: absolute;
+        bottom: 4px;
+        right: 4px;
+        height: 16px;
+        width: 16px;
+        text-indent: -99999px;
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QsTDRk47NLu5AAAAvhJREFUOMtdkk1vW0UYhc+Zufc6jo1N46Ru7DSJqQwEQREtAlEJWLJBSCxAFTskxA9ggwqOP/kJsENsWIJYwLoSIIRIFLVAGsVOYjt2RELTGNf2dYM/7rws4lsQ72400nnPPM8Qk8kVPkEhl0E2X9IkIyTPiUicpAPgLoC2iLQLucwQAFZzRZQKWRAAsvkSivlVZPOlBMl3ALwF4AWSfj5EpEHyO2PMF8X86m0A+CiTA/2k1VzxOaXUZwBeIgkRAUnBv0MRAYADEfm4mF/9EsBZg0y2kFRKfU3yReMZUlHU2XY/QQDAMx6V0iBwbIx5u1TI/qA/vJHRlmW9r5R6lwR/26pIubrP+fgctdaYbGG5WuetzbKkkvPUlg6JyMzLr7z6rVJKRQFc91s+vZJmcGoKv2/vwhiBUgrNw7s4PLqHa1efpePYMnneG4PB4JLq993zJK9MQMHSGpdX0ui6fezU9tG630G5WseT6RSikTCMCEmKUgoAXlf9/oPlyUE4wR4OBXH1mRX88ecx1m5t4tLiAhbm4z7Yh+wAuaaGw0H0v7r8JtNTAQCAEYHjOP+7PkPrjb1HrPvt9j3P80DS14ThaIz1X7eQiM8hEgljq1JDcCqA2ZkoREAAopSi67qHyrLsA9d1R5MWIgDulKuwbRtPPLaMi/MXsJi8gM3yHh78PQA5Uep5ODo6vKlarZOjXq97UybR27t1tLtdXH4qDaUVjDFIpxYRng5i/fYdeGMPWmv+1Wp1+27/e91o7I9mZmIyOzv3mm1ZTsfty+OpJYRD0/Q/kCY5FzsHzxgJTgcIETSajc/Lle2vNADUatVaLBZLRqOPXrmYTDBg2zBifNoEIJalkYifh/HGPGge/LKxtnZjb2/3WCcTC+j1uqOdSvlHpfR4NBw+H4lGnVAoRKUUtNawbYckWKvXuFOpfLOxsf5BrVbdfuhzOZXCfr0OAHpxaWnFcQLvJRLJN+PxeFwpzU6n7TabzZ9OT08/7XU7P5+cnPR9p/8AuxdUmDHkabEAAAAASUVORK5CYII=");
+    }
+    .billpay_bank_account .bpy-popup {
+        top: -50px;
+        right: -50px;
+    }
+    #onestepcheckout-form .billpay_bank_account .bpy-popup {
+        top: -140px;
+        right: -305px;
+    }
+    #aw-onestepcheckout-general-form .billpay_bank_account .bpy-popup {
+        top: 210px;
+        right: -210px;
+    }
+    .bpy-input-row {
+        min-height: 23px;
+    }
+    .bpy-input-row label {
+        width: 130px;
+        display: inline-block;
+    }
+</style>
+<div class="billpay_bank_account" id="bpy_sepa_bank_account">
+    <div class="bpy-input-row input-box">
+        <label for="<?php echo $this->getMethodCode(); ?>_account_holder">
+            <?php echo $this->__('billpay_account_holder'); ?>
+            <span class="required">*</span>
+        </label>
+        <input class="input-text required-entry" type="text"
+               id="<?php echo $this->getMethodCode(); ?>_account_holder"
+               name="payment[<?php echo $this->getMethodCode(); ?>_account_holder]"
+               value="<?php echo $this->getFullName(); ?>"/>
+    </div>
+
+    <div class="bpy-input-row input-box">
+        <label for="<?php echo $this->getMethodCode(); ?>_account_number">
+            <?php echo $this->__('billpay_iban'); ?>
+            <span class="required">*</span>
+            <i class="bpy-btn-sepa-info-popup" data-popup-target="#bpy_sepa_bank_account">i</i>
+        </label>
+        <input class="input-text required-entry" type="text" autocomplete="off"
+               id="<?php echo $this->getMethodCode(); ?>_account_number"
+               name="payment[<?php echo $this->getMethodCode(); ?>_account_number]" type="text"/>
+    </div>
+
+    <div class="bpy-input-row input-box">
+        <label for="<?php echo $this->getMethodCode(); ?>_sort_code">
+            <?php echo $this->__('billpay_bic'); ?>
+            <i class="bpy-btn-sepa-info-popup" data-popup-target="#bpy_sepa_bank_account">i</i>
+        </label>
+        <input class="input-text" type="text" autocomplete="off"
+               id="<?php echo $this->getMethodCode(); ?>_sort_code"
+               name="payment[<?php echo $this->getMethodCode(); ?>_sort_code]" />
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<?php
+/**
+ * ARCtodate GmbH & Co. KG
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   ARCtodate
+ * @package    ARCtodate_Productgroups
+ * @copyright  Copyright (c) 2012 ARCtodate Co. (http://www.ARCtodate.de)
+ * @license    
+ */ 
+?>
+<?php 
+$_coreHelper = $this->helper('core');
+if(count($this->getItemCollection()->getItems())): ?>
+<div class="collateral-box up-sell category-products">
+	<div class="h2"><?php echo $this->__($this->getBlockName()) ?></div>
+    
+    <?php $this->setColumnCount(4); ?>
+    <?php $this->resetItemsIterator() ?>
+    <?php for($_i=0;$_i<$this->getRowCount();$_i++): ?>
+        <ul class="products-grid unstyled thubmnails row-fluid">
+        <?php for($_j=0;$_j<$this->getColumnCount();$_j++): ?>
+            <?php if($_link=$this->getIterableItem()): ?>
+            <li class="span3">
+            	<div class="thumbnail">
+	                <a href="<?php echo $_link->getProductUrl() ?>" class="product-image thumbnail"><img src="<?php echo $this->helper('catalog/image')->init($_link, 'small_image')->resize(300, 245) ?>" width="300" height="200" alt="<?php echo $this->htmlEscape($_link->getName()) ?>" /></a>
+	                
+	                <div class="caption">
+		                <div class="product-name"><a href="<?php echo $_link->getProductUrl() ?>"><?php echo $this->htmlEscape($_link->getName()) ?></a></div>     
+						<?php echo $this->getPriceHtml($_link, true) ?>	
+		            </div>
+            	</div>		
+            </li>
+            <?php #else: ?>
+            <?php endif; ?>
+        <?php endfor; ?>
+        </ul>
+    <?php endfor; ?>
+    	
+</div>
+<?php endif; ?>

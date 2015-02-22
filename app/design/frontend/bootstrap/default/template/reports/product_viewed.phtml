@@ -1,0 +1,25 @@
+<?php
+/* @var $this Mage_Reports_Block_Product_Viewed */
+?>
+<?php if ($_products = $this->getRecentlyViewedProducts()): ?>
+<div class="block block-list block-viewed panel panel-default">
+	<div class="panel-heading"><?php echo $this->__('Recently Viewed Products') ?></div>
+
+    <div class="block-content panel-body">
+        <div id="recently-viewed-items">
+        <?php foreach ($_products as $_item): ?>
+            <div class="recently-viewed-item">
+            	<div class="text-center">
+	            	<a href="<?php echo $this->getProductUrl($_item) ?>" title="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>" class="product-image">
+						<img class="" src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(120); ?>" alt="<?php echo $this->stripTags($this->getImageLabel($_item, 'small_image'), null, true) ?>" />
+					</a>
+            	</div>
+                <p class="product-name"><a href="<?php echo $this->getProductUrl($_item) ?>"><?php echo $this->helper('catalog/output')->productAttribute($_item, $_item->getName() , 'name') ?></a></p>
+                <?php echo $this->getPriceHtml($_item, true, '-new') ?>
+            </div>
+            
+        <?php endforeach; ?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

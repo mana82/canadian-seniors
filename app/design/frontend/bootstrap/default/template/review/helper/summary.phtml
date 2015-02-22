@@ -1,0 +1,18 @@
+<?php if ($this->getReviewsCount()): ?>
+    <div class="ratings">
+        <?php if ($this->getRatingSummary()):?>
+        	<div class="pull-left">
+	            <div class="rating-box">
+	                <div class="rating" style="width:<?php echo $this->getRatingSummary() ?>%"></div>
+	            </div>
+	        </div>
+        <?php endif;?>
+        <p class="rating-links">
+            <a href="#tab-content-reviews" data-toggle="tab" onclick="jQuery('a[href=\'#tab-content-reviews\']').tab('show');location.href='#tab-content-reviews';return false;"><?php echo $this->__('%d Review(s)', $this->getReviewsCount()) ?></a>
+            <span class="separator">|</span>
+            <a href="#" onclick="jQuery('a[href=\'#tab-content-reviews\']').tab('show');jQuery('#review-form-popup').modal('show');return false;"><?php echo $this->__('Add Your Review') ?></a>
+        </p>
+    </div>
+<?php elseif ($this->getDisplayIfEmpty()): ?>
+    <p class="no-rating"><a href="#tab-content-reviews" data-toggle="tab" onclick="jQuery('a[href=\'#tab-content-reviews\']').tab('show');location.href='#tab-content-reviews';return false;"><?php echo $this->__('Be the first to review this product') ?></a></p>
+<?php endif; ?>

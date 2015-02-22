@@ -1,0 +1,11 @@
+<?php
+/**
+ * Product list toolbar bottom
+ *
+ * @see Mage_Catalog_Block_Product_List_Toolbar
+ */
+?>
+
+<?php if($this->getCollection()->getSize()): ?>
+	<?php echo $this->getPagerHtml() ?>
+<?php endif ?>

@@ -1,0 +1,64 @@
+<?php
+/**
+ * This file is part of a FireGento e.V. module.
+ *
+ * This FireGento e.V. module is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This script is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * @category  FireGento
+ * @package   FireGento_MageSetup
+ * @author    FireGento Team <team@firegento.com>
+ * @copyright 2013 FireGento Team (http://www.firegento.com)
+ * @license   http://opensource.org/licenses/gpl-3.0 GNU General Public License, version 3 (GPLv3)
+ */
+?>
+<?php
+/**
+ * @var $this FireGento_MageSetup_Block_Checkout_Agreements
+ */
+
+/** @var $helper FireGento_MageSetup_Helper_Data */
+$helper = Mage::helper('magesetup');
+$agreements = $this->getAgreements();
+?>
+
+<?php if (!$agreements) return; ?>
+
+<form action="" id="checkout-agreements" onsubmit="return false;">
+<ol class="checkout-agreements list-unstyled row">
+<?php foreach ($agreements as $agreement): ?>
+    <li class="col-sm-12">
+        <div class="agree checkbox">
+			<label <?php if($agreement->getIsRequired()): ?>for="agreement-<?php echo $agreement->getId()?>"<?php endif; ?>>
+				<?php if($agreement->getIsRequired()): ?>
+					<input type="checkbox" id="agreement-<?php echo $agreement->getId()?>" name="agreement[<?php echo $agreement->getId()?>]" value="1" title="<?php echo $this->htmlEscape($agreement->getCheckboxText()) ?>" class="" />
+				<?php endif; ?>
+				<?php echo $agreement->getIsHtml() ? $agreement->getCheckboxText() : $this->escapeHtml($agreement->getCheckboxText()) ?>
+				<a data-toggle="modal" href="#agreement-modal-<?php echo $agreement->getId()?>" class=""><?php echo $this->__('Show') ?></a>
+				<div class="modal fade" id="agreement-modal-<?php echo $agreement->getId()?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								<h4 class="modal-title"><? echo $agreement->getName() ?></h4>
+							</div>
+							<div class="modal-body">
+								<?php echo Mage::helper('cms')->getPageTemplateProcessor()->filter($agreement->getContent()); ?>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->__('Close') ?></button>
+							</div>
+						</div>
+					</div>
+				</div>				
+			</label>
+	   </div>
+    </li>
+<?php endforeach ?>
+</ol>
+</form>

@@ -1,0 +1,36 @@
+<?php if( $this->getCollection() && $this->count()): ?>
+<div class="box-account box-reviews">
+    <div class="box-head page-header">
+        <h2><?php echo $this->__('My Recent Reviews') ?></h2>
+        <a href="<?php echo $this->getAllReviewsUrl() ?>"><?php echo $this->__('View All Reviews') ?></a>
+    </div>
+    <table id="my_recent_reviews" class="data-table table table-striped table-bordered table-condensed">
+    	<thead>
+    		<td> </td>
+    		<td><?php echo $this->__('Product') ?></td>
+    		<td><?php echo $this->__('Rating:') ?></td>
+    	</thead>
+    	<tbody>
+    <?php $iterator = 0 ?>
+    <?php foreach ($this->getCollection() as $_review): ?>
+        <tr class="item">
+        	<td class="number "><?php echo ++$iterator ?></td>
+        	<td class="product-name"><a href="<?php echo $this->getReviewUrl($_review->getReviewId()) ?>"><?php echo $this->htmlEscape($_review->getName()) ?></a></td>
+            <td class="details">
+               
+                <?php if($_review->getSum()): ?>
+                    <div class="ratings">
+                        <strong></strong>
+                        <div class="rating-box">
+                            <div class="rating" style="width:<?php echo ( $_review->getSum() / $_review->getCount() ) ?>%;"></div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    	</tbody>
+    </table>
+    <script type="text/javascript">decorateList('my_recent_reviews');</script>
+</div>
+<?php endif; ?>
