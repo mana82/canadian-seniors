@@ -1,0 +1,12 @@
+/* top navigation */
+.navbar .nav .dropdown .dropdown-menu .dropdown .dropdown-menu{
+	left:90%;
+	top:0;
+}
+
+/*other*/
+.tax-details{font-size: 75%;}
+
+.popover {
+  max-width: 550px;
+}
